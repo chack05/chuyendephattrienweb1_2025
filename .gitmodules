@@ -1,0 +1,3 @@
+[submodule "event-management-be"]
+	path = event-management-be
+	url = ../../tr-nam/event-management-be.git
