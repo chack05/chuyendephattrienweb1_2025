@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41abcc10-8709-4e6a-a300-288cd3ebdf53" name="Changes" comment="">
+    <list default="true" id="2555a765-7830-43a5-abdf-479444ca00be" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/test_xss.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/list_users.php" beforeDir="false" afterPath="$PROJECT_DIR$/list_users.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,24 +27,25 @@
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
-  <component name="ProjectId" id="338xrbfpZC2ireyWmPW7oXPbJim" />
+  <component name="ProjectId" id="33ElBNErk0DnhdYeeawosoF6m6J" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;csrf&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "XSS",
+    "last_opened_file_path": "E:/chuyendephattrienweb1_2025/11-training-php",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -51,19 +57,13 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="41abcc10-8709-4e6a-a300-288cd3ebdf53" name="Changes" comment="" />
-      <created>1758712699422</created>
+      <changelist id="2555a765-7830-43a5-abdf-479444ca00be" name="Changes" comment="" />
+      <created>1758889975244</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1758712699422</updated>
-      <workItem from="1758712700440" duration="61000" />
-      <workItem from="1758759120197" duration="440000" />
-      <workItem from="1758760244037" duration="250000" />
-      <workItem from="1758760580575" duration="616000" />
-      <workItem from="1758779144517" duration="35000" />
-      <workItem from="1758783484823" duration="3000" />
-      <workItem from="1758854924151" duration="7000" />
-      <workItem from="1758855302636" duration="2000" />
+      <updated>1758889975244</updated>
+      <workItem from="1758889976269" duration="34000" />
+      <workItem from="1758890011244" duration="866000" />
     </task>
     <servers />
   </component>

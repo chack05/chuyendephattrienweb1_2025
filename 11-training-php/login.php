@@ -11,7 +11,6 @@ if (!empty($_POST['submit'])) {
         'username' => $_POST['username'],
         'password' => $_POST['password']
     ];
-
     // Gọi phương thức xác thực người dùng một lần duy nhất
     $user = $userModel->auth($users['username'], $users['password']);
 
