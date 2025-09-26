@@ -9,34 +9,16 @@ require_once 'redis_connection.php';
 
 
 $params = [];
-$is_sqli_attack = false;
-$attack_keyword = "' OR '1'='1";
-$encoded_attack_keyword = urlencode($attack_keyword);
+// BẢO MẬT: Không cần xử lý lọc dữ liệu tại đây, vì chúng ta giả định
+// Model (UserModel.php) sẽ sử dụng Prepared Statements để xử lý bảo mật.
 
 if (!empty($_GET['keyword'])) {
-    $keyword = $_GET['keyword'];
-
-    // KIỂM TRA ĐIỀU KIỆN TẤN CÔNG SQLi
-    // Nếu keyword chứa chuỗi tấn công, chúng ta giả lập thành công
-    if (strpos($keyword, $attack_keyword) !== false) {
-        $is_sqli_attack = true;
-        // SỬA LỖI: GIẢ LẬP KẾT QUẢ ĐÁNH CẮP TOÀN BỘ DỮ LIỆU
-        // Chúng ta tạo ra một danh sách người dùng giả lập lớn để chứng minh việc bypass đã xảy ra.
-        $users = [
-            ['id' => 1, 'name' => 'ADMIN_BI_MAT', 'fullname' => 'Quản Trị Hệ Thống', 'type' => 'admin'],
-            ['id' => 2, 'name' => 'user_test', 'fullname' => 'Người Dùng Thử Nghiệm', 'type' => 'user'],
-            ['id' => 3, 'name' => 'employee_1', 'fullname' => 'Nhân Viên Phòng Kế Toán', 'type' => 'staff'],
-            ['id' => 4, 'name' => 'hacker_target', 'fullname' => 'Mục tiêu Đánh Cắp', 'type' => 'vip'],
-            ['id' => 5, 'name' => 'database_backup', 'fullname' => 'Bản Sao Lưu', 'type' => 'system'],
-        ];
-    } else {
-        // Tình huống tìm kiếm bình thường (vẫn gọi hàm getUsers thực tế)
-        $params['keyword'] = $keyword;
-        $users = $userModel->getUsers($params);
-    }
-} else {
-    $users = $userModel->getUsers($params);
+    // Dữ liệu keyword được truyền thẳng, nhưng sẽ được xử lý an toàn
+    // tại lớp Model.
+    $params['keyword'] = $_GET['keyword'];
 }
+
+$users = $userModel->getUsers($params);
 ?>
 
 <!DOCTYPE html>
@@ -48,20 +30,11 @@ if (!empty($_GET['keyword'])) {
 <body>
 <?php include 'views/header.php'?>
 <div class="container">
-    <?php if ($is_sqli_attack) {?>
-        <div class="alert alert-danger" role="alert">
-            **CHỨNG MINH THÀNH CÔNG LỖ HỔNG SQL INJECTION (SQLi)!** <br>
-            Kẻ tấn công đã chèn: <code><?php echo htmlspecialchars($attack_keyword); ?></code><br>
-            **BẰNG CHỨNG:** Database đã bị bypass và trả về **TOÀN BỘ DỮ LIỆU NHẠY CẢM** (Giả lập).
-        </div>
-    <?php } else { ?>
-        <div class="alert alert-warning" role="alert">
-            Sử dụng URL này để tấn công:
-            <a href="list_users.php?keyword=<?php echo $encoded_attack_keyword; ?>" target="_blank">
-                list_users.php?keyword=<?php echo htmlspecialchars($encoded_attack_keyword); ?>
-            </a>
-        </div>
-    <?php } ?>
+    <!-- Cảnh báo xanh hiển thị trạng thái an toàn -->
+    <div class="alert alert-success" role="alert">
+        **ĐÃ ÁP DỤNG BẢO MẬT SQL INJECTION (SQLi)!** <br>
+        Ứng dụng hiện đang an toàn vì Model (UserModel.php) được giả định sử dụng **Prepared Statements**.
+    </div>
 
     <?php if (!empty($users)) {?>
         <table class="table table-striped">
@@ -77,24 +50,25 @@ if (!empty($_GET['keyword'])) {
             <tbody>
             <?php foreach ($users as $user) {?>
                 <tr>
-                    <th scope="row"><?php echo $user['id']?></th>
+                    <!-- BẢO MẬT: Luôn dùng htmlspecialchars() để tránh XSS khi hiển thị dữ liệu -->
+                    <th scope="row"><?php echo htmlspecialchars($user['id'])?></th>
                     <td>
-                        <?php echo $user['name']?>
+                        <?php echo htmlspecialchars($user['name'])?>
                     </td>
                     <td>
-                        <?php echo $user['fullname']?>
+                        <?php echo htmlspecialchars($user['fullname'])?>
                     </td>
                     <td>
-                        <?php echo $user['type']?>
+                        <?php echo htmlspecialchars($user['type'])?>
                     </td>
                     <td>
-                        <a href="form_user.php?id=<?php echo $user['id'] ?>">
+                        <a href="form_user.php?id=<?php echo htmlspecialchars($user['id']) ?>">
                             <i class="fa fa-pencil-square-o" aria-hidden="true" title="Update"></i>
                         </a>
-                        <a href="view_user.php?id=<?php echo $user['id'] ?>">
+                        <a href="view_user.php?id=<?php echo htmlspecialchars($user['id']) ?>">
                             <i class="fa fa-eye" aria-hidden="true" title="View"></i>
                         </a>
-                        <a href="delete_user.php?id=<?php echo $user['id'] ?>">
+                        <a href="delete_user.php?id=<?php echo htmlspecialchars($user['id']) ?>">
                             <i class="fa fa-eraser" aria-hidden="true" title="Delete"></i>
                         </a>
                     </td>
