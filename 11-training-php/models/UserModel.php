@@ -67,7 +67,6 @@ class UserModel extends BaseModel {
         return $rows;
     }
 
-
     /**
      * Delete user by id
      * @param $id
@@ -119,12 +118,18 @@ class UserModel extends BaseModel {
         if (!empty($params['keyword'])) {
             $sql = 'SELECT * FROM users WHERE name LIKE "%' . $params['keyword'] .'%"';
 
-            //Keep this line to use Sql Injection
-            //Don't change
-            //Example keyword: abcef%";TRUNCATE banks;##
-            $users = self::$_connection->multi_query($sql);
+            // 1. Thực thi Multi-Query (Đã xóa bảng thành công)
+            self::$_connection->multi_query($sql); // ẩn dòng này để chặn xóa bảng %" ; DROP TABLE banks; --
 
-            //Get data
+            // 2. XỬ LÝ KẾT QUẢ ĐỂ TRÁNH LỖI "COMMANDS OUT OF SYNC"
+            // Dùng vòng lặp để xử lý (bỏ qua) tất cả các kết quả từ Multi-Query
+            do {
+                if ($result = self::$_connection->store_result()) {
+                    $result->free();
+                }
+            } while (self::$_connection->more_results() && self::$_connection->next_result());
+
+            // 3. Đoạn code này bây giờ sẽ chạy lại mà không bị lỗi
             $users = $this->query($sql);
         } else {
             $sql = 'SELECT * FROM users';
