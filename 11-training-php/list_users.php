@@ -9,12 +9,9 @@ require_once 'redis_connection.php';
 
 
 $params = [];
-// BẢO MẬT: Không cần xử lý lọc dữ liệu tại đây, vì chúng ta giả định
-// Model (UserModel.php) sẽ sử dụng Prepared Statements để xử lý bảo mật.
-
+// BẢO MẬT: Dữ liệu keyword được truyền thẳng, nhưng sẽ được xử lý an toàn
+// tại lớp Model (UserModel.php) bằng Prepared Statements.
 if (!empty($_GET['keyword'])) {
-    // Dữ liệu keyword được truyền thẳng, nhưng sẽ được xử lý an toàn
-    // tại lớp Model.
     $params['keyword'] = $_GET['keyword'];
 }
 

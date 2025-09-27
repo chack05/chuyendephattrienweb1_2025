@@ -24,13 +24,49 @@ class UserModel extends BaseModel {
      * @param $password
      * @return array
      */
+//    public function auth($userName, $password) {
+//        $md5Password = md5($password);
+//        $sql = 'SELECT * FROM users WHERE name = "' . $userName . '" AND password = "'.$md5Password.'"';
+//
+//        $user = $this->select($sql);
+//        return $user;
+//    }
+
     public function auth($userName, $password) {
         $md5Password = md5($password);
-        $sql = 'SELECT * FROM users WHERE name = "' . $userName . '" AND password = "'.$md5Password.'"';
 
-        $user = $this->select($sql);
-        return $user;
+        // 1. Sử dụng Prepared Statement với placeholders (?)
+        // Tên và mật khẩu được mã hóa sẽ được thay thế an toàn
+        $sql = 'SELECT * FROM users WHERE name = ? AND password = ?';
+
+        // 2. Chuẩn bị (Prepare) câu lệnh SQL
+        $stmt = self::$_connection->prepare($sql);
+
+        // KIỂM TRA LỖI: Luôn kiểm tra xem lệnh prepare có thành công không
+        if (!$stmt) {
+            die('Lỗi prepare SQL: ' . self::$_connection->error);
+        }
+
+        // 3. Liên kết tham số (Bind Parameters)
+        // "ss" chỉ định rằng cả hai tham số đều là chuỗi (string)
+        $stmt->bind_param("ss", $userName, $md5Password);
+
+        // 4. Thực thi (Execute)
+        $stmt->execute();
+
+        // 5. Lấy kết quả
+        $result = $stmt->get_result();
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        // 6. Đóng Statement
+        $stmt->close();
+
+        return $rows;
     }
+
 
     /**
      * Delete user by id
